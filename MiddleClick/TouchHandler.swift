@@ -77,8 +77,13 @@ import MultitouchSupport
       middleClickPos2 = .zero
     }
 
+    var hasStrongClick = false
+
 //    TODO: Wait, what? Why is this iterating by fingersQua instead of nFingers, given that e.g. "allowMoreFingers" exists?
     for touch in UnsafeBufferPointer(start: data, count: Self.fingersQua) {
+      if touch.pressure > 90 {
+        hasStrongClick = true
+      }
       let pos = SIMD2(touch.normalizedVector.position)
       if maybeMiddleClick {
         middleClickPos1 += pos
@@ -86,6 +91,9 @@ import MultitouchSupport
         middleClickPos2 += pos
       }
     }
+
+    let state = GlobalState.shared
+    state.allowClicks = hasStrongClick
 
     if maybeMiddleClick {
       middleClickPos2 = middleClickPos1
@@ -116,6 +124,8 @@ import MultitouchSupport
     // get the current pointer location
     let location = CGEvent(source: nil)?.location ?? .zero
     let buttonType: CGMouseButton = .center
+
+    print("emulating middle click!")
 
     postMouseEvent(type: .otherMouseDown, button: buttonType, location: location)
     postMouseEvent(type: .otherMouseUp, button: buttonType, location: location)

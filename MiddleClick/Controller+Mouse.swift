@@ -15,20 +15,31 @@ extension Controller {
     proxy, type, event, refcon in
     let returnedEvent = Unmanaged.passUnretained(event)
     guard !AppUtils.isIgnoredAppBundle() else { return returnedEvent }
-    
-    if state.threeDown && (type == .leftMouseDown || type == .rightMouseDown) {
+
+//    problem with the current logic:
+//    when middle-tapping, while Three Finger Drag is active, the first event that is sent is a left mouse down, and only then middle mouse down.
+//    I want to make it so that the left mouse down is not sent when middle-tapping is certain.
+
+    if state.allowClicks && state.threeDown && (type == .leftMouseDown || type == .rightMouseDown) {
+      print("firing middle down")
       state.wasThreeDown = true
       event.type = .otherMouseDown
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
       state.threeDown = false
       state.naturalMiddleClickLastTime = Date()
+      return returnedEvent
     }
 
     if state.wasThreeDown && (type == .leftMouseUp || type == .rightMouseUp) {
+      print("firing middle up")
       state.wasThreeDown = false
       event.type = .otherMouseUp
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
+      return returnedEvent
     }
+
+    print("click event passed through, type:", type.rawValue)
+
     return returnedEvent
   }
 }

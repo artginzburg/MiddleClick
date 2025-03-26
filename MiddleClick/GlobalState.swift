@@ -14,4 +14,5 @@ final class GlobalState {
   var naturalMiddleClickLastTime: Date?
   /// stored locally, since accessing the cache is more CPU-expensive than a local variable
   var ignoredAppBundlesCache = Config.shared.ignoredAppBundles
+  var allowClicks = false
 }

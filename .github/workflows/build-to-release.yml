@@ -56,7 +56,14 @@ jobs:
           AC_API_PRIVATE_KEY: ${{ secrets.AC_API_PRIVATE_KEY }}
 
       - name: Staple notarization ticket to app
-        run: xcrun stapler staple build/MiddleClick.app
+        run: |
+          unzip build/MiddleClick.zip -d build/
+          xcrun stapler staple build/MiddleClick.app
+
+      - name: Verify code signing
+        run: |
+          codesign --verify --deep --strict --verbose=2 build/MiddleClick.app
+          spctl --assess --type exec --verbose build/MiddleClick.app
 
       - name: Compress MiddleClick again (Using Makefile)
         run: make compress

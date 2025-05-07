@@ -1,4 +1,4 @@
-all: archive export
+all: archive export compress
 
 archive:
 	xcodebuild -project MiddleClick.xcodeproj -scheme MiddleClick -configuration Release archive

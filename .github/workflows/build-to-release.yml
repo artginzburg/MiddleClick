@@ -47,7 +47,7 @@ jobs:
           printf "{\n  \"key_id\": \"%s\",\n  \"issuer_id\": \"%s\",\n  \"private_key_path\": \"%s/private_key.p8\"\n}" \
             "${AC_API_KEY_ID}" "${AC_API_ISSUER_ID}" "$(pwd)" > notarytool_credentials.json
 
-          xcrun notarytool submit build/MiddleClick.app \
+          xcrun notarytool submit build/MiddleClick.zip \
             --key notarytool_credentials.json \
             --wait
         env:
@@ -58,7 +58,7 @@ jobs:
       - name: Staple notarization ticket to app
         run: xcrun stapler staple build/MiddleClick.app
 
-      - name: Compress MiddleClick (Using Makefile)
+      - name: Compress MiddleClick again (Using Makefile)
         run: make compress
 
       - name: Configure GH CLI

@@ -44,11 +44,11 @@ jobs:
       - name: Notarize with App Store Connect API
         run: |
           echo "$AC_API_PRIVATE_KEY" | base64 --decode -o private_key.p8
-          printf "{\n  \"key_id\": \"%s\",\n  \"issuer_id\": \"%s\",\n  \"private_key_path\": \"%s/private_key.p8\"\n}" \
-            "${AC_API_KEY_ID}" "${AC_API_ISSUER_ID}" "$(pwd)" > notarytool_credentials.json
 
           xcrun notarytool submit build/MiddleClick.zip \
-            --key notarytool_credentials.json \
+            --key private_key.p8 \
+            --key-id "$AC_API_KEY_ID" \
+            --issuer "$AC_API_ISSUER_ID" \
             --wait
         env:
           AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}

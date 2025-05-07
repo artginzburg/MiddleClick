@@ -41,6 +41,34 @@ jobs:
       - name: Build MiddleClick (Using Makefile)
         run: make all
 
+      - name: Notarize with App Store Connect API
+        run: |
+          echo "$AC_API_PRIVATE_KEY" | base64 --decode -o private_key.p8
+
+          xcrun notarytool submit build/MiddleClick.zip \
+            --key private_key.p8 \
+            --key-id "$AC_API_KEY_ID" \
+            --issuer "$AC_API_ISSUER_ID" \
+            --wait
+        env:
+          AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}
+          AC_API_ISSUER_ID: ${{ secrets.AC_API_ISSUER_ID }}
+          AC_API_PRIVATE_KEY: ${{ secrets.AC_API_PRIVATE_KEY }}
+
+      - name: Staple notarization ticket to app
+        run: |
+          unzip -o build/MiddleClick.zip -d build/
+          xcrun stapler staple build/MiddleClick.app
+
+      - name: Verify code signing
+        run: |
+          codesign --verify --deep --strict --verbose=2 build/MiddleClick.app
+          spctl --assess --type exec --verbose build/MiddleClick.app
+          xcrun stapler validate build/MiddleClick.app
+
+      - name: Compress MiddleClick again (Using Makefile)
+        run: make compress
+
       - name: Configure GH CLI
         run: |
           gh repo set-default ${GITHUB_REPOSITORY}

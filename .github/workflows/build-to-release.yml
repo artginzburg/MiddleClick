@@ -64,6 +64,7 @@ jobs:
         run: |
           codesign --verify --deep --strict --verbose=2 build/MiddleClick.app
           spctl --assess --type exec --verbose build/MiddleClick.app
+          xcrun stapler validate build/MiddleClick.app
 
       - name: Compress MiddleClick again (Using Makefile)
         run: make compress

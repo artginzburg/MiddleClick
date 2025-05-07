@@ -176,7 +176,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.0.1;
 				OTHER_SWIFT_STDLIB_TOOL_FLAGS = "--source-libraries /dev/null";
 				PRODUCT_BUNDLE_IDENTIFIER = art.ginzburg.MiddleClick;
 				PRODUCT_NAME = MiddleClick;
@@ -218,7 +218,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.0.1;
 				OTHER_SWIFT_STDLIB_TOOL_FLAGS = "--source-libraries /dev/null";
 				PRODUCT_BUNDLE_IDENTIFIER = art.ginzburg.MiddleClick;
 				PRODUCT_NAME = MiddleClick;

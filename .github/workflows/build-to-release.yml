@@ -57,7 +57,7 @@ jobs:
 
       - name: Staple notarization ticket to app
         run: |
-          unzip build/MiddleClick.zip -d build/
+          unzip -o build/MiddleClick.zip -d build/
           xcrun stapler staple build/MiddleClick.app
 
       - name: Verify code signing

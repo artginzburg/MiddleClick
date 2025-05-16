@@ -1,5 +1,4 @@
 import IOKit
-import Foundation.NSRunLoop
 
 final class IOMultitouchManager: PointerableObject {
   let deviceAddedCallback: () -> Void
@@ -11,7 +10,7 @@ final class IOMultitouchManager: PointerableObject {
     let port = IONotificationPortCreate(kIOMasterPortDefault)
 
     CFRunLoopAddSource(
-      RunLoop.main.getCFRunLoop(), // TODO: ? use .current
+      CFRunLoopGetMain(), // TODO:? use .current
       IONotificationPortGetRunLoopSource(port).takeUnretainedValue(),
       .defaultMode
     )

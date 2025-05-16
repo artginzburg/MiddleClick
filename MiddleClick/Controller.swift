@@ -4,7 +4,6 @@ import AppKit
   private lazy var multitouchManager = IOMultitouchManager {
     self.scheduleRestart(2, reason: "Multitouch device added")
   }
-  static let mouseEventHandler = MouseEventHandler()
 
   private var restartTimer: Timer?
 
@@ -23,10 +22,10 @@ import AppKit
 
     accessibilityMonitor.addListener { becameTrusted in
       if becameTrusted {
-        self.registerMouseCallback()
+        _ = Self.mouseEventHandler.start()
       } else {
         trayMenu.isStatusItemVisible = true
-        Self.mouseEventHandler.unregisterMouseCallback()
+        Self.mouseEventHandler.stop()
       }
     }
   }
@@ -53,12 +52,12 @@ import AppKit
 
   private func startUnstableListeners() {
     TouchHandler.shared.registerTouchCallback()
-    registerMouseCallback()
+    _ = Self.mouseEventHandler.start()
   }
 
   private func stopUnstableListeners() {
     TouchHandler.shared.unregisterTouchCallback()
-    Self.mouseEventHandler.unregisterMouseCallback()
+    Self.mouseEventHandler.stop()
   }
 }
 

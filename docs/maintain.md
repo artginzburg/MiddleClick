@@ -11,3 +11,9 @@
 4. Write a description for the release, and publish.
 
 - [The Homebrew cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/m/middleclick.rb) should update automatically in ~3 hours.
+
+  > If that doesn't happen, run:
+
+  ```sh
+  brew bump-cask-pr middleclick --version set_MARKETING_VERSION_here
+  ```

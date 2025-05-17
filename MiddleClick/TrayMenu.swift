@@ -80,6 +80,8 @@ import AppKit
     )
     updateLaunchAtLoginItem()
 
+    _ = menu.addItem(withTitle: "Version \(BundleInfo.version)")
+
     #if DEBUG
     _ = menu.addItem(
       withTitle: "Restart listeners",
@@ -323,4 +325,12 @@ extension NSMenu {
   func addSeparator() {
     self.addItem(.separator())
   }
+}
+
+class BundleInfo {
+  private static func bundleInfo(_ key: String) -> String {
+    return Bundle.main.infoDictionary?[key] as? String ?? "%\(key)%"
+  }
+
+  static let version = bundleInfo("CFBundleShortVersionString")
 }

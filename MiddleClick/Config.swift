@@ -1,4 +1,3 @@
-import Foundation
 import ConfigCore
 
 final class Config: ConfigCore {
@@ -17,11 +16,7 @@ final class Config: ConfigCore {
   @UserDefault(transformGet: { $0 / 1000 })
   var maxTimeDelta: Double = 300
 
-  @UserDefault var tapToClick = getIsSystemTapToClickEnabled
+  @UserDefault var tapToClick = SystemPermissions.getIsSystemTapToClickEnabled
 
   @UserDefault var ignoredAppBundles = Set<String>()
-}
-
-private func getIsSystemTapToClickEnabled() -> Bool {
-  return CFPreferencesGetAppBooleanValue("Clicking" as CFString, "com.apple.driver.AppleBluetoothMultitouch.trackpad" as CFString, nil)
 }

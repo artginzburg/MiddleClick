@@ -57,6 +57,8 @@ brew install --cask --no-quarantine middleclick
 
 ### <a href="https://github.com/artginzburg/MiddleClick/releases/latest/download/MiddleClick.zip">Direct Download · <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/MiddleClick?label=%20&color=gray"></a>
 
+If you've used v1 or v2 — glance over [How to migrate](./docs/MIGRATIONS.md).
+
 <br>
 
 ### Hide Status Bar Item
@@ -113,6 +115,8 @@ defaults write art.ginzburg.MiddleClick maxTimeDelta 150
 > Default is 300
 
 ## Building from source
+
+> Assuming you have `Command Line Tools` installed
 
 1. Clone the repo
 2. Run `make`

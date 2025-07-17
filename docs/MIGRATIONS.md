@@ -7,6 +7,8 @@
    > `System Settings...` > `Privacy & Security` > `Accessibility`
 3. Enable the new version in Accessibility settings when prompted.
 
+![](./removing%20from%20Accessibility.png)
+
 ## To be aware
 
 ### Input freeze

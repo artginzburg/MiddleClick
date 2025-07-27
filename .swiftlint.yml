@@ -1,0 +1,14 @@
+disabled_rules:
+  - identifier_name
+  - force_cast
+  - todo
+  - closure_parameter_position
+
+trailing_comma:
+  mandatory_comma: true
+
+line_length:
+  warning: 170
+
+type_name:
+  excluded: T

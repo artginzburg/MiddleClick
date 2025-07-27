@@ -146,11 +146,6 @@ import MultitouchSupport
     currentDeviceList.forEach { $0.unregisterAndStop(touchCallback) }
     currentDeviceList.removeAll()
   }
-
-  /// Not used yet.
-  private func isClick(touch: MTTouch) -> Bool {
-    return touch.pressure >= 100
-  }
 }
 
 extension SIMD2 where Scalar == Float {

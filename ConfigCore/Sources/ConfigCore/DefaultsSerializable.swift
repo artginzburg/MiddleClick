@@ -1,5 +1,4 @@
 public protocol DefaultsSerializable {
-  // swiftlint:disable:next type_name
   typealias T = Bridge.T
   associatedtype Bridge: DefaultsBridge
   //  associatedtype ArrayBridge: DefaultsBridge

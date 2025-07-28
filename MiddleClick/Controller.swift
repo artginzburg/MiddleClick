@@ -1,5 +1,6 @@
 import AppKit
 
+// swiftlint:disable:next redundant_sendable
 @MainActor final class Controller: PointerableObject, Sendable {
   private lazy var multitouchManager = IOMultitouchManager {
     self.scheduleRestart(2, reason: "Multitouch device added")

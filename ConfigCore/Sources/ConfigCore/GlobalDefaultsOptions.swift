@@ -4,7 +4,7 @@ public extension GlobalDefaultsOptions {
 }
 
 @propertyWrapper
-fileprivate struct Flag<T> {
+private struct Flag<T> {
   @MainActor let key = GlobalDefaultsOptions.onFlagInit()
   var defaultValue: T
 
@@ -41,4 +41,3 @@ final public class GlobalDefaultsOptions: Singleton {
     flags[key] = value
   }
 }
-

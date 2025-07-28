@@ -7,7 +7,7 @@ extension Controller {
   private static let kCGMouseButtonCenter = Int64(CGMouseButton.center.rawValue)
 
   static let mouseEventHandler = CGEventController {
-    _proxy, type, event, _refcon in
+    _, type, event, _ in
 
     let returnedEvent = Unmanaged.passUnretained(event)
     guard !AppUtils.isIgnoredAppBundle() else { return returnedEvent }

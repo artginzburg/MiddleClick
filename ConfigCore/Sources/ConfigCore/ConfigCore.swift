@@ -103,4 +103,3 @@ public struct UserDefaultOptions: OptionSetInt {
     Singleton.instances[key] = self
   }
 }
-

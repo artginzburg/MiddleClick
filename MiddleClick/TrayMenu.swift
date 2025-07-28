@@ -161,8 +161,7 @@ extension TrayMenu {
   @objc private func openAccessibilitySettings() {
     if #available(macOS 10.15, *) {
       if let url = URL(
-        string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")
-      {
+        string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
         NSWorkspace.shared.open(url)
       }
     } else {
@@ -206,8 +205,7 @@ extension TrayMenu: NSApplicationDelegate {
     }
   #endif
 
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool
-    {
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
   #if DEBUG
       guard !isRunningInXcode() || timesHandledReopen >= 2 else {
         timesHandledReopen += 1

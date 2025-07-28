@@ -82,7 +82,7 @@ fileprivate extension Controller {
 fileprivate extension Controller {
   /// TODO:? is this restart necessary? I don't see any changes when it's removed, but keep in mind I've only spent 5 minutes testing different app and system states
   static let displayReconfigurationCallback:
-  CGDisplayReconfigurationCallBack = { display, flags, userData in
+  CGDisplayReconfigurationCallBack = { _, flags, userData in
     if flags.containsAny(of: .setModeFlag, .addFlag, .removeFlag, .disabledFlag) {
       Controller.from(pointer: userData).scheduleRestart(2, reason: "Display reconfigured")
     }

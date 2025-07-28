@@ -22,7 +22,7 @@ let package = Package(
       dependencies: ["MultitouchSupport"],
       linkerSettings: [
         .linkedFramework("MultitouchSupport"),
-        .unsafeFlags(["-F/System/Library/PrivateFrameworks"])
+        .unsafeFlags(["-F/System/Library/PrivateFrameworks"]),
       ]
     ),
   ]

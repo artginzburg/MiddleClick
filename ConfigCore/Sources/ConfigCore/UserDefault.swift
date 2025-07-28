@@ -112,7 +112,7 @@ public class UserDefaultWrapper<T: DefaultsSerializable> {
   private static let shared = DefaultsInitStorage()
   private init() {}
 
-  private var store: [String : Any] = [:]
+  private var store: [String: Any] = [:]
   static func preRegister(_ key: String, _ defaultValue: Any) {
     if let defaultValueAsSet = defaultValue as? Set<String> {
       shared.store[key] = Array(defaultValueAsSet)

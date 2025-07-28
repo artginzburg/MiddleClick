@@ -51,7 +51,6 @@ class CGEventController {
     return true
   }
 
-
   func stop() {
     // Use guard to safely unwrap and validate the eventTap
     guard let tap = eventTap, CFMachPortIsValid(tap) else {

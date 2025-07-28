@@ -24,7 +24,7 @@ import MultitouchSupport
   private var middleClickPos2: SIMD2<Float> = .zero
 
   private let touchCallback: MTFrameCallbackFunction = {
-    device, data, nFingers, timestamp, frame in
+    _, data, nFingers, _, _ in
     guard !AppUtils.isIgnoredAppBundle() else { return }
 
     let state = GlobalState.shared

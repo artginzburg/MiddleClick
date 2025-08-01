@@ -29,6 +29,8 @@ import AppKit
         Self.mouseEventHandler.stop()
       }
     }
+
+    checkForConflicts()
   }
 
   /// Schedule listeners to be restarted. If a restart is pending, discard its delay and use the most recently requested delay.

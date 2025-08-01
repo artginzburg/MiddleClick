@@ -13,9 +13,12 @@ enum SystemPermissions {
   static func getIsSystemTapToClickEnabled() -> Bool {
     return getTrackpadDriverSetting("Clicking")
   }
-  /// Not used yet.
   static func getIsSystemThreeFingerDragEnabled() -> Bool {
     return getTrackpadDriverSetting("TrackpadThreeFingerDrag")
+  }
+  static func getIsSystemThreeFingerTapEnabled() -> Bool {
+//    This one actually returns either 0 or 2, but that converts to a boolean just fine.
+    return getTrackpadDriverSetting("TrackpadThreeFingerTapGesture")
   }
 
   private static func getTrackpadDriverSetting(_ key: String) -> Bool {

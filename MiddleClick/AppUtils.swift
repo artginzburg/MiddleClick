@@ -11,4 +11,14 @@ enum AppUtils {
     guard let bundleId = focusedApp?.bundleIdentifier else { return false }
     return GlobalState.shared.ignoredAppBundlesCache.contains(bundleId)
   }
+
+  @MainActor static func warningAlert(title: String, message: String) -> NSAlert {
+    let alert = NSAlert()
+    alert.messageText = title
+    alert.informativeText = message
+    alert.alertStyle = .warning
+    alert.addButton(withTitle: "OK")
+//    alert.runModal()
+    return alert
+  }
 }

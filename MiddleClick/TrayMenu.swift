@@ -22,6 +22,11 @@ import AppKit
   private func initSequence() {
     setupStatusItem()
     accessibilityMonitor.addListener(onChange: updateAccessibilityPermissionStatus)
+    config.$minimumFingers.onSet {_ in
+      DispatchQueue.main.async {
+        self.updateTapToClickStatus()
+      }
+    }
   }
 
   #if DEBUG

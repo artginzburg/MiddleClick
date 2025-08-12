@@ -18,6 +18,8 @@ import Foundation.NSUserDefaults
   private var _cachedValue: T.T?
 
   fileprivate var onSet: ((T) -> Void)?
+// TODO: make it possible to remove listeners from onSetListeners.
+  fileprivate var onSetListeners: [(T) -> Void] = []
 
   public init(
     wrappedValue defaultValue: T,
@@ -100,7 +102,16 @@ public class UserDefaultWrapper<T: DefaultsSerializable> {
   }
 
   @MainActor public func onSet(_ onSet: @escaping (T) -> Void) {
-    userDefault.onSet = onSet
+    userDefault.onSetListeners.append(onSet)
+
+    guard userDefault.onSet == nil else { return }
+//    This is the first onSet for this userDefault.
+
+    userDefault.onSet = { newValue in
+      for listener in self.userDefault.onSetListeners {
+        listener(newValue)
+      }
+    }
   }
   @MainActor public func delete(reset: Bool = true) {
     UserDefaults.standard.removeObject(forKey: userDefault.key!)

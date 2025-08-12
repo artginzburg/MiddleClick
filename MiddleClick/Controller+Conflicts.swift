@@ -42,7 +42,23 @@ Workarounds — Disable 'Tap to click' in the status menu of MiddleClick.
       button.action = #selector(self.openConflictingGesturesDocs)
       button.target = self
 
+      let updateFingersSettingButton = alert.addButton(withTitle: "Use four fingers to middleclick")
+      updateFingersSettingButton.action = #selector(self.changeTo4FingersGesture)
+      updateFingersSettingButton.target = self
+
       alert.runModal()
+    }
+  }
+
+  @objc private func changeTo4FingersGesture(sender: NSButton) {
+//    This is not a good way of forcing a modal to close.
+    if let buttonCell = (sender.window?.accessibilityDefaultButton() as? NSButtonCell) {
+      Config.shared.minimumFingers = 4
+      buttonCell.performClick(nil)
+    } else {
+      log.error(
+        "Could not find default button in window \(String(describing: sender.window)). Please report this as a bug."
+      )
     }
   }
 

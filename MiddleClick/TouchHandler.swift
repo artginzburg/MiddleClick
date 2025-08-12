@@ -8,12 +8,15 @@ import MultitouchSupport
     Self.config.$tapToClick.onSet {
       self.tapToClick = $0
     }
+    Self.config.$minimumFingers.onSet {
+      Self.fingersQua = $0
+    }
   }
 
   /// stored locally, since accessing the cache is more CPU-expensive than a local variable
   private var tapToClick = config.tapToClick
 
-  private static let fingersQua = config.minimumFingers
+  private static var fingersQua = config.minimumFingers
   private static let allowMoreFingers = config.allowMoreFingers
   private static let maxDistanceDelta = config.maxDistanceDelta
   private static let maxTimeDelta = config.maxTimeDelta

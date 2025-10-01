@@ -6,8 +6,8 @@ import AppKit
   private var infoItem, tapToClickItem, accessibilityPermissionStatusItem, accessibilityPermissionActionItem, ignoredAppItem, launchAtLoginItem: NSMenuItem!
   private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
   var isStatusItemVisible: Bool {
-    get { trayMenu.statusItem.isVisible }
-    set { trayMenu.statusItem.isVisible = newValue }
+    get { statusItem.isVisible }
+    set { statusItem.isVisible = newValue }
   }
 
   override init() {

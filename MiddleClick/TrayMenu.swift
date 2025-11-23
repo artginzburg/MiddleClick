@@ -4,6 +4,7 @@ import AppKit
 @MainActor final class TrayMenu: NSObject {
   private let config = Config.shared
   private var infoItem, tapToClickItem, accessibilityPermissionStatusItem, accessibilityPermissionActionItem, ignoredAppItem, launchAtLoginItem: NSMenuItem!
+  private var fingerCountControl: FingerCountControl!
   private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
   var isStatusItemVisible: Bool {
     get { statusItem.isVisible }
@@ -73,6 +74,12 @@ import AppKit
       withTitle: "Reset to System Settings", action: #selector(resetTapToClick), target: self)
     resetItem.isAlternate = true
     resetItem.keyEquivalentModifierMask = .option
+
+    let advancedItem = menu.addItem(withTitle: "Advanced")
+    let advancedMenu = NSMenu()
+    advancedItem.submenu = advancedMenu
+
+    addFingerCountItem(advancedMenu)
 
     updateTapToClickStatus()
 
@@ -294,9 +301,33 @@ extension TrayMenu {
   }
 }
 
+extension TrayMenu {
+  private func addFingerCountItem(_ menu: NSMenu) {
+    fingerCountControl = FingerCountControl()
+    fingerCountControl.onValueChanged = { _ in
+      self.updateTapToClickStatus()
+    }
+
+    let fingerCountItem = NSMenuItem()
+    fingerCountItem.view = fingerCountControl
+    menu.addItem(fingerCountItem)
+
+    let resetFingerCountItem = menu.addItem(
+      withTitle: "Reset Finger Count", action: #selector(resetFingerCount), target: self)
+    resetFingerCountItem.isAlternate = true
+    resetFingerCountItem.keyEquivalentModifierMask = .option
+  }
+
+  @objc private func resetFingerCount() {
+    config.$minimumFingers.delete()
+    fingerCountControl.refresh()
+  }
+}
+
 extension TrayMenu: NSMenuDelegate {
   func menuWillOpen(_ menu: NSMenu) {
     updateIgnoredAppItem()
+    fingerCountControl.refresh()
   }
 
   private func updateIgnoredAppItem() {

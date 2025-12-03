@@ -14,7 +14,7 @@ final class CustomLogger: Sendable {
   /// log stream --predicate 'subsystem == "art.ginzburg.MiddleClick"' --style compact --level info
   /// ```
   func info(_ message: String) {
-    os_log("%@", log: osLogger, type: .info, message)
+    os_log("%{public}@", log: osLogger, type: .info, message)
   }
 
   /// ## To view logs
@@ -22,7 +22,7 @@ final class CustomLogger: Sendable {
   /// log stream --predicate 'subsystem == "art.ginzburg.MiddleClick"' --style compact
   /// ```
   func error(_ message: String) {
-    os_log("%@", log: osLogger, type: .error, message)
+    os_log("%{public}@", log: osLogger, type: .error, message)
   }
 }
 

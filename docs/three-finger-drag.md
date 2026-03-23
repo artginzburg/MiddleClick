@@ -55,13 +55,36 @@ These options also make your primary tap take longer to register, as a side-effe
 
 ## Related problems
 
-- MiddleClick conflicts with the "Tap with Three Fingers" setting of "Look up & data selectors"
+- MiddleClick conflicts with the "Tap with Three Fingers" setting of "Look up & data detectors"
+  - Workaround from [#52](https://github.com/artginzburg/MiddleClick/issues/52): setting "Look up & data detectors" _to_ "Tap with Three Fingers" actually _blocks_ the unintended left click, at the cost of a brief "Look up" popup appearing sometimes.
 
-Opened issues:
+---
 
-- https://github.com/artginzburg/MiddleClick/issues/145
-- https://github.com/artginzburg/MiddleClick/issues/125
-- https://github.com/artginzburg/MiddleClick/issues/96
-- https://github.com/artginzburg/MiddleClick/issues/48
-- https://github.com/artginzburg/MiddleClick/issues/52
-- https://github.com/artginzburg/MiddleClick/issues/34
+## Technical context (read before trying to fix)
+
+### Why it broke in v3.0
+
+In v2.7, `mouseCallback` only ran when "Tap to Click" was **disabled** (the old `needToClick` check). Most TFD users had "Tap to Click" enabled, so `mouseCallback` never interfered with TFD.
+
+v3.0 removed this condition — `mouseCallback` now always runs. This is what introduced the regression. See [#125](https://github.com/artginzburg/MiddleClick/issues/125).
+
+### Root cause
+
+`mouseCallback` listens for left mouse down/up events when 3 fingers are on the trackpad. Three Finger Drag does the exact same thing — it emulates left mouse down when 3 fingers touch, and left mouse up when they lift. There is no known way to distinguish a TFD-emulated event from a real user click.
+
+### Ideas for a fix
+
+1. **Detect TFD and disable `mouseCallback`** — the old v2.7 logic worked because it effectively did this. If the app can detect that TFD is enabled in System Settings, it could skip `mouseCallback` and rely solely on `touchCallback`. The touch callback could then use finger pressure (>= 1) to detect a physical click instead of listening for mouse events. Error-prone but worth exploring. ([#125 comment](https://github.com/artginzburg/MiddleClick/issues/125))
+
+2. **Check commit `004510c`** — apparently not all commits from previous contributors were merged. This commit may contain relevant logic. ([#48 comment](https://github.com/artginzburg/MiddleClick/issues/48))
+
+3. **Study BetterTouchTool** — multiple users confirm BTT's 3-finger click does not conflict with TFD. Unclear how they achieve this. ([#48](https://github.com/artginzburg/MiddleClick/issues/48))
+
+### Related issues
+
+- [#125](https://github.com/artginzburg/MiddleClick/issues/125) — TFD broke in v3.0 (root cause analysis)
+- [#52](https://github.com/artginzburg/MiddleClick/issues/52) — left click fires alongside middle click (workarounds, user reports across Ventura/Sonoma/Sequoia)
+- [#48](https://github.com/artginzburg/MiddleClick/issues/48) — TFD blocked entirely (commit `004510c` reference)
+- [#34](https://github.com/artginzburg/MiddleClick/issues/34) — left click always fires with TFD active
+- [#145](https://github.com/artginzburg/MiddleClick/issues/145) — window dragging and text selection broken in v3.1 (these are clearly TFD features)
+- [#96](https://github.com/artginzburg/MiddleClick/issues/96) — RMB + LMB triggering middle click (possibly related)

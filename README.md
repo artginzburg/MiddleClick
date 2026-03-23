@@ -50,7 +50,7 @@ It's more than just `⌘`+click
 ### Via :beer: [Homebrew](https://brew.sh) (Recommended)
 
 ```ps1
-brew install --cask --no-quarantine middleclick
+brew install --cask middleclick
 ```
 
 > Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/m/middleclick.rb) if you're interested
@@ -61,18 +61,21 @@ If you've used v1 or v2 — glance over [How to migrate](./docs/MIGRATIONS.md).
 
 <br>
 
+## Preferences
+
 ### Hide Status Bar Item
 
-1. Holding `⌘`, drag it away from the status bar until you see a :heavy_multiplication_x: (cross icon)
-2. Let it go
+> This is a native macOS feature — works the same for any app.
 
-> To recover the item, just open MiddleClick when it's already running
+1. Hold `⌘` and drag the icon away from the menu bar until you see :heavy_multiplication_x:
+2. Release
 
-## Preferences
+To bring it back — just open MiddleClick again while it's already running.
 
 ### Number of Fingers
 
 - Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
+- **Note:** setting `fingers` to `2` will conflict with normal two-finger right-clicks and single-finger clicks.
 
 ```ps1
 defaults write art.ginzburg.MiddleClick fingers 4
@@ -113,6 +116,12 @@ defaults write art.ginzburg.MiddleClick maxTimeDelta 150
 ```
 
 > Default is 300
+
+## Troubleshooting
+
+- [Accessibility permissions not working after an update](./docs/troubleshooting.md#accessibility-permissions-not-working-after-an-update)
+- [Antivirus / CleanMyMac false positive](./docs/troubleshooting.md#antivirus--cleanmymac-flags-middleclick-as-adware)
+- [Three Finger Drag conflicts](./docs/three-finger-drag.md)
 
 ## Building from source
 

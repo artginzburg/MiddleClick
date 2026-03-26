@@ -23,6 +23,7 @@ import MultitouchSupport
 
   private var maybeMiddleClick = false
   private var touchStartTime: Date?
+  private static var lastEmulatedMiddleClickTime: Date?
   private var middleClickPos1: SIMD2<Float> = .zero
   private var middleClickPos2: SIMD2<Float> = .zero
 
@@ -116,6 +117,12 @@ import MultitouchSupport
   }
 
   private static func emulateMiddleClick() {
+    if let lastTime = lastEmulatedMiddleClickTime,
+       -lastTime.timeIntervalSinceNow < maxTimeDelta * 0.3 {
+      return
+    }
+    lastEmulatedMiddleClickTime = .init()
+
     // get the current pointer location
     let location = CGEvent(source: nil)?.location ?? .zero
     let buttonType: CGMouseButton = .center

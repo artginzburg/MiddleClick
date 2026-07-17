@@ -13,20 +13,12 @@ import AppKit
 
   private static let immediateRestart = false
 
-  /// Feature flag to enable/disable session handling for Fast User Switching.
-  private static let enableSessionHandling = decideOnEnableSessionHandling()
-
   func start() {
     log.info("Starting listeners...")
 
     TouchHandler.shared.registerTouchCallback()
     observeWakeNotification()
-    if Self.enableSessionHandling {
-      log.info("Session handling enabled - will monitor Fast User Switching")
-      setupSessionHandling()
-    } else {
-      log.info("Session handling disabled - macOS 15 handles session switching correctly")
-    }
+    setupSessionHandling()
     multitouchManager.setupMultitouchListener()
     setupDisplayReconfigurationCallback()
 
@@ -44,7 +36,7 @@ import AppKit
 
   /// Schedule listeners to be restarted. If a restart is pending, discard its delay and use the most recently requested delay.
   func scheduleRestart(_ delay: TimeInterval, reason: String) {
-    if Self.enableSessionHandling && !isUserSessionActive {
+    if !isUserSessionActive {
       restartLog.info("\(reason), but user session is inactive - skipping restart")
       return
     }
@@ -62,7 +54,7 @@ import AppKit
   func restartListeners() {
     log.info("Restarting now...")
     stopUnstableListeners()
-    if !Self.enableSessionHandling || isUserSessionActive {
+    if isUserSessionActive {
       startUnstableListeners()
       log.info("Restart success.")
     } else {
@@ -123,28 +115,21 @@ fileprivate extension CGDisplayChangeSummaryFlags {
 }
 
 // MARK: - Session Handling for Fast User Switching
+//
+// Always enabled: the multitouch session switching bug (#127) still reproduces
+// on macOS 26.5 when MiddleClick runs in more than one logged-in user's session —
+// concurrent multitouch device registrations from different sessions break frame
+// delivery. Stopping listeners while the session is off-console is safe on every
+// macOS version, so no version gate.
 
 fileprivate extension Controller {
   /// Session state tracking variables (using static storage for simplicity)
   private static var _userSessionActive = true
-  private static var _lastSessionChangeTime: Date = .distantPast
 
   /// Public accessor for session state (used by scheduleRestart and restartListeners)
   var isUserSessionActive: Bool { Self._userSessionActive }
 
-  /// Enable for macOS versions that have the multitouch session switching bug.
-  /// Disable for macOS 15.0+ (Sequoia) where Apple fixed the issue.
-  ///
-  /// This is actually not confirmed, but I can't reproduce issue #127 on macOS 15.7.
-  private static func decideOnEnableSessionHandling() -> Bool {
-    let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-    if osVersion.majorVersion < 15 {
-      return true
-    }
-    return false
-  }
-
-  /// Initialize session handling - call this from start() when feature is enabled
+  /// Initialize session handling - call this from start()
   func setupSessionHandling() {
     Self._userSessionActive = true
     observeSessionNotifications()
@@ -166,13 +151,6 @@ fileprivate extension Controller {
   }
 
   @objc private func receiveSessionResignActiveNote(_ note: Notification) {
-    let now = Date()
-    guard now.timeIntervalSince(Self._lastSessionChangeTime) > 0.5 else {
-      log.info("Ignoring session resign - too soon after last change")
-      return
-    }
-    Self._lastSessionChangeTime = now
-
     log.info("User session resigned active, stopping listeners")
     Self._userSessionActive = false
     restartTimer?.invalidate()
@@ -184,18 +162,11 @@ fileprivate extension Controller {
   }
 
   @objc private func receiveSessionBecomeActiveNote(_ note: Notification) {
-    let now = Date()
-    guard now.timeIntervalSince(Self._lastSessionChangeTime) > 0.5 else {
-      log.info("Ignoring session become active - too soon after last change")
-      return
-    }
-    Self._lastSessionChangeTime = now
-
-    log.info("User session became active, starting listeners")
+    log.info("User session became active, restarting listeners")
     Self._userSessionActive = true
 
     DispatchQueue.main.async {
-      self.startUnstableListeners()
+      self.restartListeners()
     }
   }
 }

@@ -15,6 +15,10 @@
   <br>
 </div>
 
+<p align="center">
+  🏁 <b>MiddleClick is complete — see <a href="https://github.com/artginzburg/MiddleClick/issues/174">the announcement</a>.</b>
+</p>
+
 <img src="demo.png" width="55%">
 
 <h2 align="right">:mag: Usage</h2>

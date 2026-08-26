@@ -15,9 +15,18 @@
   <br>
 </div>
 
-<p align="center">
-  🏁 <b>MiddleClick is complete — see <a href="https://github.com/artginzburg/MiddleClick/issues/174">the announcement</a>.</b>
-</p>
+> [!NOTE]
+> ## 🏁 MiddleClick is finished
+>
+> It stays here, free and GPL-3.0, and `brew install --cask middleclick` keeps working. Nothing
+> removed, no nags, no telemetry.
+>
+> The middle click it gave you — three-finger click and three-finger tap — is **free forever in
+> [WheelClick](https://wheelclick.app/?ref=middleclick-readme)**, its from-scratch successor, built
+> on the documented, supported part of macOS.
+>
+> [The full story →](https://github.com/artginzburg/MiddleClick/issues/174)
+<br>
 
 <img src="demo.png" width="55%">
 

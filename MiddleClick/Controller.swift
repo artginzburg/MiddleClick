@@ -24,10 +24,10 @@ import AppKit
 
     accessibilityMonitor.addListener { becameTrusted in
       if becameTrusted {
-        _ = Self.mouseEventHandler.start()
+        HIDClickHandler.shared.start()
       } else {
         trayMenu.isStatusItemVisible = true
-        Self.mouseEventHandler.stop()
+        HIDClickHandler.shared.stop()
       }
     }
 
@@ -65,12 +65,13 @@ import AppKit
 
   private func startUnstableListeners() {
     TouchHandler.shared.registerTouchCallback()
-    _ = Self.mouseEventHandler.start()
+    HIDClickHandler.shared.start()
   }
 
   private func stopUnstableListeners() {
     TouchHandler.shared.unregisterTouchCallback()
-    Self.mouseEventHandler.stop()
+    HIDClickHandler.shared.stop()
+    GlobalState.shared.reset()
   }
 }
 

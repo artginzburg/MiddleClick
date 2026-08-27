@@ -31,6 +31,18 @@ clean-build:
 	@rm -f $(BUILD_STAMP)
 	@echo "🧹 Build stamp cleaned"
 
+## Version bump targets (semantic versioning)
+.PHONY: bump-patch bump-minor bump-major
+
+bump-patch:
+	@./scripts/bump-version.sh patch
+
+bump-minor:
+	@./scripts/bump-version.sh minor
+
+bump-major:
+	@./scripts/bump-version.sh major
+
 ## Release targets
 archive:
 	xcodebuild -project MiddleClick.xcodeproj -scheme MiddleClick -configuration Release archive

@@ -11,31 +11,20 @@ extension Controller {
       let mayConflictByFingers = Self.config.minimumFingers == 3
       guard mayConflictByFingers else { return }
 
-      let threeFingerDragConflict = SystemPermissions.getIsSystemThreeFingerDragEnabled()
       let threeFingerTap = SystemPermissions.getIsSystemThreeFingerTapEnabled()
       let threeFingerTapConflict = threeFingerTap && Self.config.tapToClick
 
-      guard threeFingerDragConflict || threeFingerTapConflict else { return }
-
-      let both = threeFingerDragConflict && threeFingerTapConflict
+      guard threeFingerTapConflict else { return }
 
       let alert = AppUtils.warningAlert(
-        title: "Conflicting gesture\(both ? "s" : "")",
+        title: "Conflicting gesture",
         message: """
 Some optional gestures on your Mac won't work properly with MiddleClick.
 Turn them off in System Settings, change MiddleClick's "fingers" setting to 4, or apply the workarounds below:
-\(threeFingerDragConflict ? """
-
-Dragging style: "Three Finger Drag"
-Issue — won't function, also adds an unintended left click to any middle click.
-Workarounds — Opt in for another Dragging style, or Choose to 'Ignore Finder' in the status menu of MiddleClick.
-""" : "")
-\(threeFingerTapConflict ? """
 
 Look up & data detectors: "Tap with Three Fingers"
 Issue — will fire simultaneously with MiddleClick.
 Workarounds — Disable 'Tap to click' in the status menu of MiddleClick.
-""" : "")
 """
       )
       let button = alert.addButton(withTitle: "Read more...")

@@ -103,6 +103,18 @@ import AppKit
     )
     #endif
 
+    menu.addSeparator()
+
+    _ = menu.addItem(
+      withTitle: "What's next for MiddleClick", action: #selector(openSuccessor), target: self)
+
+    if Date() < Self.offerEnds {
+      _ = menu.addItem(
+        withTitle: "Get WheelClick — 20% off", action: #selector(openOffer), target: self)
+    }
+
+    menu.addSeparator()
+
     _ = menu.addItem(
       withTitle: "About \(getAppName())...", action: #selector(openWebsite), target: self)
 
@@ -164,8 +176,25 @@ extension TrayMenu {
 
 // MARK: Actions
 extension TrayMenu {
+  private static let offerEnds = DateComponents(
+    calendar: .current, year: 2026, month: 10, day: 1).date ?? .distantPast
+
   @objc private func openWebsite() {
     if let url = URL(string: "https://github.com/artginzburg/MiddleClick") {
+      NSWorkspace.shared.open(url)
+    }
+  }
+
+  @objc private func openSuccessor() {
+    if let url = URL(string: "https://github.com/artginzburg/MiddleClick/issues/174") {
+      NSWorkspace.shared.open(url)
+    }
+  }
+
+  @objc private func openOffer() {
+    if let url = URL(
+      string: "https://buy.polar.sh/polar_cl_5jbgEF8UuZJchbcK2aoumIC89lIMZXZMqbtSG28xpUG"
+        + "?utm_source=middleclick&utm_medium=app&utm_campaign=byemiddleclick") {
       NSWorkspace.shared.open(url)
     }
   }

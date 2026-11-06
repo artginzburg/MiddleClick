@@ -21,7 +21,7 @@
 > It stays here, free and GPL-3.0, and `brew install --cask middleclick` keeps working. Nothing
 > removed, no nags, no telemetry.
 >
-> The middle click it gave you — three-finger click and three-finger tap — is **free forever in
+> The trackpad middle click it gave you — three-finger click and three-finger tap — is **free forever in
 > [WheelClick](https://wheelclick.app/?ref=middleclick-readme)**, its from-scratch successor, built
 > on the documented, supported part of macOS.
 >

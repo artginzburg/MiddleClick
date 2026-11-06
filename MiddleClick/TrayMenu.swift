@@ -105,15 +105,12 @@ import AppKit
 
     menu.addSeparator()
 
-    _ = menu.addItem(
-      withTitle: "What's next for MiddleClick", action: #selector(openSuccessor), target: self)
-
-    if Date() < Self.offerEnds {
+    // WheelClick needs macOS 12, so a Mac that cannot run it is not offered it.
+    if #available(macOS 12, *) {
       _ = menu.addItem(
-        withTitle: "Get WheelClick — 20% off", action: #selector(openOffer), target: self)
+        withTitle: "Upgrade to WheelClick", action: #selector(openSuccessor), target: self)
+      menu.addSeparator()
     }
-
-    menu.addSeparator()
 
     _ = menu.addItem(
       withTitle: "About \(getAppName())...", action: #selector(openWebsite), target: self)
@@ -176,9 +173,6 @@ extension TrayMenu {
 
 // MARK: Actions
 extension TrayMenu {
-  private static let offerEnds = DateComponents(
-    calendar: .current, year: 2026, month: 10, day: 1).date ?? .distantPast
-
   @objc private func openWebsite() {
     if let url = URL(string: "https://github.com/artginzburg/MiddleClick") {
       NSWorkspace.shared.open(url)
@@ -186,15 +180,7 @@ extension TrayMenu {
   }
 
   @objc private func openSuccessor() {
-    if let url = URL(string: "https://github.com/artginzburg/MiddleClick/issues/174") {
-      NSWorkspace.shared.open(url)
-    }
-  }
-
-  @objc private func openOffer() {
-    if let url = URL(
-      string: "https://buy.polar.sh/polar_cl_5jbgEF8UuZJchbcK2aoumIC89lIMZXZMqbtSG28xpUG"
-        + "?utm_source=middleclick&utm_medium=app&utm_campaign=byemiddleclick") {
+    if let url = URL(string: "https://wheelclick.app/?ref=middleclick-app") {
       NSWorkspace.shared.open(url)
     }
   }

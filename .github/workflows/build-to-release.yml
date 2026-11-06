@@ -22,21 +22,22 @@ jobs:
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
 
           # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
 
-      - name: Use Latest Available Xcode
-        run: sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)/Contents/Developer"
-        # use /Applications/Xcode_16.2.app instead if problems occur
+      # Xcode 27 builds for macOS 12 and later only, and MiddleClick targets 10.13,
+      # so the newest Xcode 26 is the newest one that can build it. 3.3.0 was built with 26.6.
+      - name: Use Latest Xcode 26
+        run: sudo xcode-select -s "$(find /Applications -maxdepth 1 -name 'Xcode_26*.app' | sort -V | tail -n 1)/Contents/Developer"
 
       - name: Build MiddleClick (Using Makefile)
         run: make all
@@ -71,7 +72,7 @@ jobs:
 
       - name: Configure GH CLI
         run: |
-          gh repo set-default ${GITHUB_REPOSITORY}
+          gh repo set-default "$GITHUB_REPOSITORY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -87,10 +88,10 @@ jobs:
         run: |
           ASSET_NAME="MiddleClick.zip"
           RELEASE_ID=$(gh release view "$RELEASE_TAG" --json databaseId -q '.databaseId')
-          ASSET_ID=$(gh api repos/${GITHUB_REPOSITORY}/releases/$RELEASE_ID/assets --jq '.[] | select(.name=="'"$ASSET_NAME"'") | .id')
+          ASSET_ID=$(gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" --jq '.[] | select(.name=="'"$ASSET_NAME"'") | .id')
 
           if [ -n "$ASSET_ID" ]; then
-            gh api --method DELETE repos/${GITHUB_REPOSITORY}/releases/assets/$ASSET_ID
+            gh api --method DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$ASSET_ID"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
